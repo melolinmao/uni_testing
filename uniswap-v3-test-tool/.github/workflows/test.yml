@@ -1,0 +1,60 @@
+name: Uniswap V3 测试工具 CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: 运行Forge测试
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: 安装Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: 安装依赖
+        run: forge install
+
+      - name: 运行Forge测试
+        run: |
+          cd core_suite
+          ./run_tests.sh
+        
+  security:
+    name: 运行Slither分析
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: 安装Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: 安装Slither
+        run: |
+          python -m pip install --upgrade pip
+          pip install slither-analyzer
+
+      - name: 运行Slither分析
+        run: |
+          cd core_suite
+          ./run_slither.sh -a
+        continue-on-error: true
+
+      - name: 上传Slither报告
+        uses: actions/upload-artifact@v3
+        with:
+          name: slither-report
+          path: core_suite/reports/slither
+          if-no-files-found: ignore 

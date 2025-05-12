@@ -1,0 +1,36 @@
+# Foundry
+out/
+cache/
+broadcast/
+
+# Coverage
+lcov.info
+reports/
+
+# Logs
+logs/
+
+# Dependencies
+lib/
+
+# macOS
+.DS_Store
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.swp
+*.swo
+*~
+tmp/
+
+# Environment files
+.env
+.env.local
+
+# Test artifacts
+anvil.json 
