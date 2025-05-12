@@ -1,0 +1,47 @@
+name: 代码覆盖率分析
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  coverage:
+    name: 生成覆盖率报告
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: 安装Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: 安装依赖
+        run: forge install
+
+      - name: 安装lcov
+        run: sudo apt-get install -y lcov
+
+      - name: 运行覆盖率分析
+        run: |
+          cd core_suite
+          ./coverage.sh
+
+      - name: 上传覆盖率报告
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: core_suite/reports/coverage
+          if-no-files-found: error
+
+      - name: 部署到GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        with:
+          folder: core_suite/reports/coverage
+          target-folder: coverage 

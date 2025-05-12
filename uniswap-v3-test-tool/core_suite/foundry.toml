@@ -1,0 +1,30 @@
+[profile.default]
+# 合约源码及测试路径
+src           = "contracts"
+out           = "out"
+libs          = ["lib"]
+test         = "tests"
+
+# Solidity 编译版本
+solc_version  = "0.8.20"
+
+# 依赖仓库 remappings（指向 lib/ 下的克隆目录）
+remappings    = [
+  "v3-core/=lib/v3-core/",
+  "v3-periphery/=lib/v3-periphery/"
+]
+
+# 默认的 RPC 端点（用于 fork 测试）
+# 请替换为您的实际API密钥
+rpc_endpoints = { mainnet = "https://eth-mainnet.alchemyapi.io/v2/YOUR_API_KEY" }
+
+[profile.ci]
+# 生成 lcov 覆盖率报告
+coverage_report  = true
+# 最低覆盖率要求（百分比）
+minimum_coverage = 80
+
+# Foundry 会自动将这些仓库 clone 到 lib/ 目录
+[dependencies]
+v3-core = "github.com/Uniswap/v3-core@v1.0.0"
+v3-periphery = "github.com/Uniswap/v3-periphery@v1.1.1"
