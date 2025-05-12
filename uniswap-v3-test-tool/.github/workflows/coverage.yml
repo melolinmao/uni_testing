@@ -2,9 +2,9 @@ name: 代码覆盖率分析
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, dev ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, dev ]
   workflow_dispatch:
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
 
       - name: 部署到GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
         with:
           folder: core_suite/reports/coverage
           target-folder: coverage 

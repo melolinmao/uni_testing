@@ -6,6 +6,12 @@ on:
     - cron: '0 1 * * 1'
   # 手动触发
   workflow_dispatch:
+  # 添加推送触发
+  push:
+    branches: [ dev ]
+    paths:
+      - 'core_suite/tests/**.sol'
+      - 'core_suite/contracts/**.sol'
 
 jobs:
   audit:
