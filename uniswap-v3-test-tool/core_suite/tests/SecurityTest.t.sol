@@ -249,8 +249,8 @@ contract TokenWithReentrancy is IERC20Minimal {
     string public symbol;
     uint8 public decimals;
     uint256 public totalSupply;
-    mapping(address => uint256) public balanceOf;
-    mapping(address => mapping(address => uint256)) public allowance;
+    mapping(address => uint256) public override balanceOf;
+    mapping(address => mapping(address => uint256)) public override allowance;
     
     address public attackTarget;
     bool public isAttacking;
@@ -377,8 +377,8 @@ contract MockERC20 is IERC20Minimal {
     string public symbol;
     uint8 public decimals;
     uint256 public totalSupply;
-    mapping(address => uint256) public balanceOf;
-    mapping(address => mapping(address => uint256)) public allowance;
+    mapping(address => uint256) public override balanceOf;
+    mapping(address => mapping(address => uint256)) public override allowance;
     
     constructor(string memory _name, string memory _symbol, uint8 _decimals) {
         name = _name;
@@ -423,7 +423,7 @@ contract MockUniswapV3Pool is IUniswapV3Pool {
     uint160 private sqrtPriceX96;
     int24 private tick;
     
-    mapping(bytes32 => PositionData) public positions;
+    mapping(bytes32 => PositionData) private _positions;
     uint256 private mockCollectedFees;
     
     // 模拟一个再入防护锁
@@ -443,8 +443,10 @@ contract MockUniswapV3Pool is IUniswapV3Pool {
     
     struct PositionData {
         uint128 liquidity;
-        uint256 feeGrowthInside0X128;
-        uint256 feeGrowthInside1X128;
+        uint256 feeGrowthInside0LastX128;
+        uint256 feeGrowthInside1LastX128;
+        uint128 tokensOwed0;
+        uint128 tokensOwed1;
     }
     
     // 模拟交换的返回值
@@ -537,7 +539,7 @@ contract MockUniswapV3Pool is IUniswapV3Pool {
         
         // 更新position
         bytes32 positionKey = keccak256(abi.encodePacked(owner, tickLower, tickUpper));
-        positions[positionKey].liquidity += amount;
+        _positions[positionKey].liquidity += amount;
         
         return (mockAmount0, mockAmount1);
     }
@@ -549,7 +551,7 @@ contract MockUniswapV3Pool is IUniswapV3Pool {
         
         // 更新position
         bytes32 positionKey = keccak256(abi.encodePacked(owner, tickLower, tickUpper));
-        positions[positionKey].liquidity -= amount;
+        _positions[positionKey].liquidity -= amount;
         
         // 转移代币
         IERC20Minimal(token0).transfer(owner, mockAmount0);
@@ -566,8 +568,8 @@ contract MockUniswapV3Pool is IUniswapV3Pool {
         
         // 重置手续费增长
         bytes32 positionKey = keccak256(abi.encodePacked(owner, tickLower, tickUpper));
-        positions[positionKey].feeGrowthInside0X128 = 0;
-        positions[positionKey].feeGrowthInside1X128 = 0;
+        _positions[positionKey].feeGrowthInside0LastX128 = 0;
+        _positions[positionKey].feeGrowthInside1LastX128 = 0;
         
         return (mockAmount0, mockAmount1);
     }
@@ -711,5 +713,45 @@ contract MockUniswapV3Pool is IUniswapV3Pool {
     
     function snapshotCumulativesInside(int24, int24) external pure override returns (int56, uint160, uint32) {
         return (0, 0, 0);
+    }
+
+    // 实现缺失的接口方法
+    function factory() external view override returns (address) {
+        return address(0);
+    }
+
+    function maxLiquidityPerTick() external view override returns (uint128) {
+        return type(uint128).max;
+    }
+
+    function observations(uint256 index) external view override returns (
+        uint32 blockTimestamp,
+        int56 tickCumulative,
+        uint160 secondsPerLiquidityCumulativeX128,
+        bool initialized
+    ) {
+        return (0, 0, 0, false);
+    }
+
+    function tickSpacing() external view override returns (int24) {
+        return 60;
+    }
+
+    // 实现positions函数以匹配接口
+    function positions(bytes32 key) external view override returns (
+        uint128 liquidity,
+        uint256 feeGrowthInside0LastX128,
+        uint256 feeGrowthInside1LastX128,
+        uint128 tokensOwed0,
+        uint128 tokensOwed1
+    ) {
+        PositionData memory position = _positions[key];
+        return (
+            position.liquidity,
+            position.feeGrowthInside0LastX128,
+            position.feeGrowthInside1LastX128,
+            position.tokensOwed0,
+            position.tokensOwed1
+        );
     }
 } 

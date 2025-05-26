@@ -1,0 +1,59 @@
+---
+# 以太坊网络配置
+ethereum:
+  # RPC节点URL
+  rpc_url: "https://eth-mainnet.g.alchemy.com/v2/your-api-key"
+  # 测试使用的Fork区块
+  fork_block: 17500000
+  # 测试账户私钥（请勿使用包含实际资金的账户）
+  test_private_key: "0x0000000000000000000000000000000000000000000000000000000000000001"
+  # 测试账户地址
+  test_address: "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf"
+
+# Uniswap V3配置
+uniswap:
+  # 工厂合约地址
+  factory_address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+  # 路由合约地址
+  router_address: "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+  # 位置管理合约地址
+  position_manager_address: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88"
+  # 测试池子
+  test_pools:
+    - name: "WETH/USDC"
+      address: "0x8ad599c3A0ff1De082011EFDDc58f1908eb6e6D8"
+      token0: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"  # WETH
+      token1: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"  # USDC
+      fee: 3000
+
+# 测试配置
+testing:
+  # 并发负载测试配置
+  load_test:
+    # 交易数量
+    transactions: 1000
+    # 并发线程数
+    concurrency: 10
+    # 每个交易的ETH数量
+    eth_per_tx: 0.001
+  # 时间模拟测试配置
+  time_warp:
+    # 时间跳跃（秒）
+    jump_interval: 86400  # 1天
+
+# 监控配置
+monitoring:
+  # 指标导出器
+  exporter:
+    host: "0.0.0.0"
+    port: 8000
+  # Prometheus配置
+  prometheus:
+    host: "localhost"
+    port: 9090
+  # Grafana配置
+  grafana:
+    host: "localhost"
+    port: 3000
+    admin_user: "admin"
+    admin_password: "admin"

@@ -1,0 +1,30 @@
+name: Uniswap V3 测试工具 CI
+
+on:
+  push:
+    branches: [ main, master, dev ]
+  pull_request:
+    branches: [ main, master, dev ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 运行Forge测试
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: 安装Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: 安装依赖
+        run: forge install
+
+      - name: 运行Forge测试
+        run: |
+          cd core_suite
+          ./run_tests.sh 

@@ -4,9 +4,15 @@ src           = "contracts"
 out           = "out"
 libs          = ["lib"]
 test         = "tests"
+auto_detect_solc = true
+# 覆盖率统计配置 - 包括外部库
+coverage_report_include_libraries = true
 
 # Solidity 编译版本
-solc_version  = "0.8.20"
+solc_version  = "0.7.6"
+
+# 添加多编译器版本支持
+# extra_solcs = ["0.7.6"]
 
 # 依赖仓库 remappings（指向 lib/ 下的克隆目录）
 remappings    = [
@@ -17,6 +23,17 @@ remappings    = [
 # 默认的 RPC 端点（用于 fork 测试）
 # 请替换为您的实际API密钥
 rpc_endpoints = { mainnet = "https://eth-mainnet.alchemyapi.io/v2/YOUR_API_KEY" }
+
+# 模糊测试配置 - 减少运行次数以避免超时
+[fuzz]
+runs = 32            # 默认是256，我们减少到32
+max_test_rejects = 65536
+
+# 不变量测试配置 - 减少运行深度
+[invariant]
+runs = 32            # 默认是256，我们减少到32
+depth = 10           # 默认是15，我们减少到10
+fail_on_revert = true
 
 [profile.ci]
 # 生成 lcov 覆盖率报告

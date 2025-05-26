@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uniswap V3 测试工具</title>
+    <!-- Material UI CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Apollo Client -->
+    <script src="https://cdn.jsdelivr.net/npm/apollo-boost@0.4.9/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/graphql@15.5.0/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-apollo@3.1.5/react-apollo.min.js"></script>
+    <!-- React & React DOM -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Ethers.js -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Uniswap V3 测试工具</div>
+            <ul>
+                <li><a href="#pools">流动性池</a></li>
+                <li><a href="#tokens">代币</a></li>
+                <li><a href="#transactions">交易</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="dashboard">
+            <h1>Uniswap V3 Dashboard</h1>
+            <div class="refresh-button">
+                <button id="refreshData">刷新数据</button>
+                <span id="lastUpdated">上次更新: 从未</span>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>总锁定价值 (TVL)</h3>
+                    <p id="totalTVL">加载中...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>24小时交易量</h3>
+                    <p id="totalVolume24h">加载中...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>总交易次数</h3>
+                    <p id="totalTransactions">加载中...</p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="tvlChart"></canvas>
+            </div>
+        </section>
+
+        <section id="pools">
+            <h2>Top 流动性池</h2>
+            <div class="table-container">
+                <table id="poolsTable">
+                    <thead>
+                        <tr>
+                            <th>池子</th>
+                            <th>费率</th>
+                            <th>TVL (USD)</th>
+                            <th>24h交易量</th>
+                            <th>7d交易量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 数据将通过JavaScript加载 -->
+                        <tr>
+                            <td colspan="5">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevPools">上一页</button>
+                <span id="poolsPage">第 1 页</span>
+                <button id="nextPools">下一页</button>
+            </div>
+        </section>
+
+        <section id="tokens">
+            <h2>代币列表</h2>
+            <div class="table-container">
+                <table id="tokensTable">
+                    <thead>
+                        <tr>
+                            <th>代币</th>
+                            <th>价格 (USD)</th>
+                            <th>价格变化 (24h)</th>
+                            <th>TVL (USD)</th>
+                            <th>交易量 (24h)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 数据将通过JavaScript加载 -->
+                        <tr>
+                            <td colspan="5">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevTokens">上一页</button>
+                <span id="tokensPage">第 1 页</span>
+                <button id="nextTokens">下一页</button>
+            </div>
+        </section>
+
+        <section id="transactions">
+            <h2>最新交易</h2>
+            <div class="table-container">
+                <table id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>交易哈希</th>
+                            <th>类型</th>
+                            <th>总价值 (USD)</th>
+                            <th>代币数量</th>
+                            <th>账户</th>
+                            <th>时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 数据将通过JavaScript加载 -->
+                        <tr>
+                            <td colspan="6">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevTransactions">上一页</button>
+                <span id="transactionsPage">第 1 页</span>
+                <button id="nextTransactions">下一页</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Uniswap V3 测试工具</p>
+    </footer>
+
+    <!-- 应用JavaScript -->
+    <script src="js/graphql-queries.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html> 

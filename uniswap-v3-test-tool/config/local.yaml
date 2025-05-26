@@ -1,0 +1,17 @@
+---
+# 本地开发覆盖配置
+# 此文件将覆盖default.yaml中的设置，用于本地开发环境
+
+# 以太坊网络配置
+ethereum:
+  # 使用本地Anvil节点
+  rpc_url: "http://localhost:8545"
+  # 可选：覆盖Fork区块数
+  # fork_block: 18000000
+
+# 测试配置
+testing:
+  # 降低本地开发负载测试的规模
+  load_test:
+    transactions: 100
+    concurrency: 5
